@@ -14,11 +14,11 @@ import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteDatabaseHook;
 
 public class MainActivity extends Activity {
-	//EventDataSQLHelper eventsData;
+	EventDataSQLHelper eventsData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		SQLiteDatabase.loadLibs(this);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		String apkRoot="chmod 777 "+getPackageCodePath();
@@ -27,18 +27,19 @@ public class MainActivity extends Activity {
 	}
 	
 	public void starService(View view) {
-		readWeChatDatabase();
+		this.readWeChatDatabase();
 	}
     public void readWeChatDatabase() {
 		
-		//SQLiteDatabase.loadLibs(this);
+		SQLiteDatabase.loadLibs(this);
 		String password = "f7fb70e";	
-		File databaseFile = getDatabasePath("/storage/emulated/0/DCIM/EnMicroMsg.db");
-		//File databaseFile = getDatabasePath("EnMicroMsg.db");
-		//eventsData = new EventDataSQLHelper(this);
+		File databaseFile = getDatabasePath("/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/EnMicroMsg.db");
+		//File databaseFile = getDatabasePath("/EnMicroMsg.db");
+		eventsData = new EventDataSQLHelper(this);
 		
 		SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
 			  public void preKey(SQLiteDatabase database){
+				  database.rawExecSQL("PRAGMA cipher_default_use_hmac=off;");
 			  }
 			  public void postKey(SQLiteDatabase database){
 				  database.rawExecSQL("PRAGMA cipher_migrate;");  //最关键的一句！！！
