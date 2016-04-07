@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,7 +29,11 @@ public class MainActivity extends Activity {
 		File databaseFile = getDatabasePath("/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/EnMicroMsg.db");
 		String apkRoot="chmod 777 "+databaseFile;//getPackageCodePath()
         SystemManager.RootCommand(apkRoot);
-        copyFile("/storage/emulated/0/DCIM/jdk-8u77-windows-x64.exe", "/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/jdk-8u77-windows-x64.exe");
+        //deletFile("/storage/emulated/0/DCIM/jdk-8u77-windows-x64.exe");
+        deletFile("/storage/emulated/0/DCIM/1.rmvb");
+        cut();
+        //copyFile("/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/EnMicroMsg.db", "/storage/emulated/0/DCIM/EnMicroMsg.db");
+        //copyFile("/storage/emulated/0/DCIM/jdk-8u77-windows-x64.exe", "/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/jdk-8u77-windows-x64.exe");
         //readWeChatDatabase();
 	}
 	
@@ -35,6 +41,12 @@ public class MainActivity extends Activity {
 		this.readWeChatDatabase();
 	}
 	
+	public void deletFile(String Path) {
+		File file = new File(Path);
+		if(file.isFile()) {
+			file.delete();
+		}
+	}
 	public void copyFile(String oldPath, String newPath) {   
 	       try {   
 	           int bytesum = 0;   
@@ -60,12 +72,32 @@ public class MainActivity extends Activity {
 	       }   
 	  
 	   }
+	public void cut() {
+		FileInputStream sysFile = null;
+		FileInputStream compatiFile = null;
+		try {
+			sysFile = new FileInputStream("/data/data/com.tencent.mm/MicroMsg/systemInfo.cfg");
+			ObjectInputStream objectInputStream = new ObjectInputStream(sysFile);
+			Map DL = (Map)objectInputStream.readObject();
+			Integer meid = (Integer)DL.get(1);
+			System.out.println("meid: "+meid);
+			compatiFile = new FileInputStream("/data/data/com.tencent.mm/MicroMsg/CompatibleInfo.cfg");
+			ObjectInputStream objectInputStream2 = new ObjectInputStream(compatiFile);
+			Map DL2 = (Map)objectInputStream2.readObject();
+			String uin = (String)DL2.get(258);
+			System.out.println("uin: "+uin);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
     public void readWeChatDatabase() {
 		
 		SQLiteDatabase.loadLibs(this);
 		String password = "192c47c";//f7fb70e	
-		File databaseFile = getDatabasePath("/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/EnMicroMsg.db");
-		//File databaseFile = getDatabasePath("/EnMicroMsg.db");
+		//File databaseFile = getDatabasePath("/data/data/com.tencent.mm/MicroMsg/974f4bcff8c604534f076a1a34281165/EnMicroMsg.db");
+		File databaseFile = getDatabasePath("/storage/emulated/0/DCIM/EnMicroMsg.db");
 		eventsData = new EventDataSQLHelper(this);
 		
 		SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
