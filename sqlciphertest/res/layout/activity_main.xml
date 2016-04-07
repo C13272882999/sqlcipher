@@ -29,5 +29,29 @@
         android:onClick="startService"
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true"/>
+    <Button 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/button_search" 
+        android:layout_x="253px" 
+        android:layout_y="25px" 
+        android:text="搜索"
+        android:onClick="findFiles"
+        android:layout_toRightOf="@+id/key"
+    /> 
+    <EditText 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/key"
+        android:text="EnMicroMsg.db"
+    /> 
+    <TextView 
+        android:layout_width="fill_parent" 
+        android:layout_height="370px" 
+        android:id="@+id/TextView_Result" 
+        android:layout_x="0px" 
+        android:layout_y="60px"
+        android:layout_below="@+id/key"
+    />
 
 </RelativeLayout>
